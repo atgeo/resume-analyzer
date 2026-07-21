@@ -1,0 +1,7 @@
+.env
+.venv/
+.DS_Store
+.idea/
+resume.json
+__pycache__/
+*.pdf

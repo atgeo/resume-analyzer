@@ -11,10 +11,15 @@ from rag import build_vector_store
 
 app = typer.Typer()
 
+PdfPath = Annotated[
+    Path,
+    typer.Argument(exists=True, file_okay=True, dir_okay=False, readable=True, help="Path to the resume PDF."),
+]
+
 
 @app.command()
 def ask(
-        pdf: Path,
+        pdf: PdfPath,
         query: Annotated[str, typer.Option()],
 ):
     vector_store = build_vector_store(pdf)
@@ -26,7 +31,7 @@ def ask(
 
 @app.command()
 def extract(
-        pdf: Path
+        pdf: PdfPath
 ):
     vector_store = build_vector_store(pdf)
 

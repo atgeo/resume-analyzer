@@ -4,9 +4,7 @@ from llm import get_llm
 
 llm = get_llm()
 
-prompt = ChatPromptTemplate.from_messages([
-    ("system",
-     """
+SYSTEM_PROMPT = """
 You must answer ONLY using the provided context.
 
 If the answer cannot be determined from the context,
@@ -18,7 +16,9 @@ Do not use your own knowledge.
 Context:
 {context}
 """
-     ),
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", SYSTEM_PROMPT),
     ("human", "{question}")
 ])
 

@@ -6,6 +6,16 @@ from models import ResumeSummary
 
 llm = get_llm()
 
+SYSTEM_PROMPT = """
+Extract the requested fields from the provided resume.
+
+If a value cannot be determined, infer nothing.
+Return only the structured data.
+
+Context:
+{context}
+"""
+
 
 def extract_resume(vector_store: Chroma) -> ResumeSummary:
     structured_llm = llm.with_structured_output(ResumeSummary)
@@ -18,18 +28,7 @@ def extract_resume(vector_store: Chroma) -> ResumeSummary:
     context = "\n\n".join(doc.page_content for doc in docs)
 
     messages = ChatPromptTemplate.from_messages([
-        (
-            "system",
-            """
-Extract the requested fields from the provided resume.
-
-If a value cannot be determined, infer nothing.
-Return only the structured data.
-
-Context:
-{context}
-"""
-        )
+        ("system", SYSTEM_PROMPT)
     ]).invoke({"context": context})
 
     return structured_llm.invoke(messages)

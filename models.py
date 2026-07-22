@@ -1,4 +1,5 @@
 from pydantic import BaseModel, computed_field, Field, EmailStr
+from enum import StrEnum
 
 
 class Job(BaseModel):
@@ -17,6 +18,23 @@ class Education(BaseModel):
     end_date: str | None = Field(default=None, description="End date")
 
 
+class Skill(BaseModel):
+    name: str = Field(description="Skill name")
+    tags: list[str] = Field(description="Tags associated with the skill")
+
+
+class LanguageProficiency(StrEnum):
+    BEGINNER = "Beginner"
+    INTERMEDIATE = "Intermediate"
+    ADVANCED = "Advanced"
+    NATIVE = "Native"
+
+
+class Language(BaseModel):
+    name: str = Field(description="Language name")
+    proficiency: LanguageProficiency = Field(description="Proficiency level")
+
+
 class ResumeSummary(BaseModel):
     first_name: str = Field(description="First name")
     middle_name: str | None = Field(default=None, description="Middle name")
@@ -25,6 +43,8 @@ class ResumeSummary(BaseModel):
     phone: str | None = Field(default=None, description="Phone number")
     jobs: list[Job] = Field(default_factory=list)
     education: list[Education] = Field(default_factory=list)
+    skills: list[Skill] = Field(default_factory=list)
+    languages: list[Language] = Field(default_factory=list)
 
     @computed_field
     @property
